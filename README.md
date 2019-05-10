@@ -1,2 +1,2 @@
-# Otonom-Bisiklet
-Web üzerinden yön tuşları ile bisiklet kontrolüs
+﻿# Otonom-Bisiklet
+Web üzerinden yön tuşları ile bisiklet kontrolü
