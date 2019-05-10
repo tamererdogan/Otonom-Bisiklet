@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>Otonom Bisiklet</title>
+</head>
+<body>
+	<script src="/socket.io/socket.io.js"></script>
+	<script type="text/javascript" src="./js/baglanti.js"></script>	
+	<div style="text-align: center; padding-top: 7%; width: 100%;">
+		<h4 id="baglantiDurumu" style="color: red;">Arduino'ya Bağlanılmadı</h4>
+		<select id="portlar">
+		</select>
+		<button onclick="yenile()">Yenile</button>
+		<button onclick="baglan()">Bağlan</button>  	
+		<button onclick="baglantiKes()">Bağlantıyı Kes</button>
+		<a id="yonlendirmeBaglantisi" href="yonlendir">Komut Sayfasına Git</a>
+	</div>	
+</body>
+</html>

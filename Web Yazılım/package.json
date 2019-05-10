@@ -1,0 +1,17 @@
+{
+  "name": "otonom-bisiklet",
+  "version": "1.0.0",
+  "description": "Web üzerinden yön tuşları ile bisiklet kontrolü",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Tamer Erdoğan",
+  "license": "ISC",
+  "devDependencies": {
+    "express": "^4.16.4",
+    "serialport": "^7.1.5",
+    "shelljs": "^0.8.3",
+    "socket.io": "^2.2.0"
+  }
+}
