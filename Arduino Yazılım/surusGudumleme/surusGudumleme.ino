@@ -10,16 +10,33 @@ int hizEnkoderi = 12; //Arka teker enkoderi
 /* DEĞİŞKENLER */
 int hubMotorPwm = 0; //Hub motora verilen pwm değeri
 int hedefAci = 0; //Gidilecek olan açı
-int suankiAci = 0; //Şuan ki açı
+int anlikAci = 0; //Şuan ki açı
+int hata = 0; //hedefAci ile anlikAci arasındaki fark
 char okunan; //Seriport'tan gelen karakteri tutar
 signed long int darbe = 0; //Enkoderden okunan Pals(Darbe) sayısı
+
+void motor_sur(int pwm, int hata)
+{
+  if(hata > 0)
+  {
+    analogWrite(sagYon, 0);
+    analogWrite(solYon, pwm);
+  }else if(hata < 0)
+  {
+    analogWrite(sagYon, pwm);
+    analogWrite(solYon, 0);
+  }else
+  {
+    analogWrite(sagYon, 0);
+    analogWrite(solYon, 0);
+  }  
+}
 
 void seriHaberlesmeKesmesi()
 {
   okunan = Serial.read();
   switch(okunan)
   {
-    //A ve D'yi server'la aynı tarzda yaz arttırma eksiltme olayını
     case 'w':
       if(hubMotorPwm >= 190)
       {
@@ -38,24 +55,24 @@ void seriHaberlesmeKesmesi()
         hubMotorPwm -= 10;
         break;
       }    
-    case 'a':
-      if(hedefAci >= 60)
-      {
-        break;
-      }else
+    case 'd':
+      if(hedefAci > -60)
       {
         hedefAci -= 1;
         break;
-      }      
-    case 'd':
-      if(hedefAci <= -60)
+      }else
+      {        
+        break;
+      }    
+    case 'a':
+      if(hedefAci < 60)
       {
+        hedefAci += 1;
         break;
       }else
-      {
-        hedefAci += 1;             
+      {                    
         break;
-      }     
+      }   
   }
 }
 
@@ -95,37 +112,30 @@ void setup()
 
 void loop() 
 {
-
   //Arka enkoderin kodu eklenecek
 
-  
   //  200(Pals) * 15(Redüktör Oranı) = 3000 (1 turda oluşan Pals Sayısı)
   //  360/3000 = 0.12 (1 Palsa denk gelen açı değeri)
-  suankiAci = int(darbe*0.12);
-  if(suankiAci >= 360 || suankiAci <= -360)
+  anlikAci = int(darbe*0.12);
+  
+  if(anlikAci >= 360 || anlikAci <= -360)
   {
-    suankiAci = suankiAci%360;
+    anlikAci = anlikAci%360;
   }
   
-  //A D hareketlendirme
-  if(hedefAci < 0)
-  {
-    analogWrite(sagYon, 0);
-    analogWrite(solYon, 15);
-  }else if(hedefAci > 0)
-  {
-    analogWrite(sagYon, 15);
-    analogWrite(solYon, 0);
-  }else
-  {
-    analogWrite(sagYon, 0);
-    analogWrite(solYon, 0);
-  }
-
-  analogWrite(hubMotorPin, hubMotorPwm);
- 
-  Serial.write(hubMotorPwm);
+  hata = hedefAci - anlikAci;
+  motor_sur(15, hata);
+  
+  //analogWrite(hubMotorPin, hubMotorPwm);
+  Serial.write(hubMotorPwm); 
+  Serial.write(anlikAci);
   Serial.write(hedefAci);
-  //Serial.write(suankiAci); 
-  delay(50);
+  Serial.write(hata);
+
+ /* Serial.print("Hedef:");
+  Serial.print(hedefAci);
+  Serial.print(" Anlik:");
+  Serial.println(anlikAci); */
+  
+  delay(10);
 }

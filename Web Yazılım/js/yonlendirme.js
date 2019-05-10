@@ -1,11 +1,24 @@
 var socket = io.connect();
 
-socket.on("htmlHiz", function(hiz){
-	document.getElementById("hiz").innerHTML = hiz;
+socket.on("htmlPwm", function(pwm){
+	document.getElementById("pwm").innerHTML = pwm;
 }); 
 
-socket.on("htmlAci", function(aci){
-	document.getElementById("aci").innerHTML = aci;
+socket.on("htmlAnlikHiz", function(anlikHiz){
+	console.log(aci);
+	document.getElementById("anlikHiz").innerHTML = anlikHiz;
+});
+
+socket.on("htmlHedefAci", function(hedefAci){
+	document.getElementById("hedefAci").innerHTML = hedefAci;
+});
+
+socket.on("htmlAnlikAci", function(anlikAci){	
+	document.getElementById("anlikAci").innerHTML = anlikAci;
+});
+
+socket.on("htmlHata", function(hata){	
+	document.getElementById("hata").innerHTML = hata;
 });
 
 window.onkeydown=function(e){

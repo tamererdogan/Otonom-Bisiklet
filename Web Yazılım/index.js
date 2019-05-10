@@ -60,7 +60,6 @@ io.on('connection', function(socket){
 		});
 
 		socket.on("yenile", function(){
-
 			portListele(socket);
 		});	
 	}
@@ -101,16 +100,45 @@ io.on('connection', function(socket){
 		});
 			    
 	    seriport.on('data', function(data) {
+
 	    	if(data[1] > 60)
 	    	{
-	    		var aci = 256 - data[1];    		
-	    		aci = (aci*(-1));
+	    		var anlikAci = 256 - data[1];    		
+	    		anlikAci = (anlikAci*(-1));
 	    	}else
 	    	{
-	    		var aci = data[1];  
+	    		var anlikAci = data[1];  
 	    	}
-	    	io.sockets.emit("htmlHiz", data[0]); //Hız
-	    	io.sockets.emit("htmlAci", aci); //Açı    	
+
+	    	if(data[2] > 60)
+	    	{
+	    		var hedefAci = 256 - data[2];    		
+	    		hedefAci = (hedefAci*(-1));
+	    	}else
+	    	{
+	    		var hedefAci = data[2];  
+	    	}
+
+	    	// if(data[2] > 60)
+	    	// {
+	    	// 	var hedefAci = 256 - data[2];    		
+	    	// 	hedefAci = (hedefAci*(-1));
+	    	// }else
+	    	// {
+	    	// 	var hedefAci = data[2];  
+	    	// }
+
+    		
+    		// var anlikAci = data[1];
+	    	// var hedefAci = data[2];		    	
+	    	var pwm = data[0];    	
+	    	var hata = data[3];
+			console.log("1:"+pwm+" 2:"+anlikAci+" 3:"+hedefAci+" 4:"+hata);
+	    	io.sockets.emit("htmlPwm", pwm);
+	    	io.sockets.emit("htmlHedefAci", hedefAci);
+	    	io.sockets.emit("htmlAnlikAci", anlikAci);
+	    	io.sockets.emit("htmlHata", hata);
+	    	//io.sockets.emit("htmlHedefHiz", data[0]); //Hız	
 	    });	
 	}
 });
