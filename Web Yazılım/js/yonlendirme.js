@@ -4,10 +4,9 @@ socket.on("htmlPwm", function(pwm){
 	document.getElementById("pwm").innerHTML = pwm;
 }); 
 
-socket.on("htmlAnlikHiz", function(anlikHiz){
-	console.log(aci);
-	document.getElementById("anlikHiz").innerHTML = anlikHiz;
-});
+// socket.on("htmlAnlikHiz", function(anlikHiz){
+// 	document.getElementById("anlikHiz").innerHTML = anlikHiz;
+// });
 
 socket.on("htmlHedefAci", function(hedefAci){
 	document.getElementById("hedefAci").innerHTML = hedefAci;
@@ -22,22 +21,26 @@ socket.on("htmlHata", function(hata){
 });
 
 window.onkeydown=function(e){
-              
+             
+	//65              
 	if(e.keyCode==37) //Sol 
 	{
 	  console.log("Tuşa basıldı: Sol");
-	  socket.emit('aciAzalt');
+	  socket.emit('aciArttir');
 	}
+	//87
 	else if(e.keyCode==38) //Üst
 	{
 	  console.log("Tuşa basıldı: Üst");
 	  socket.emit('hizArttir');       
 	}
+	//68
 	else if(e.keyCode==39)  //Sağ
 	{
 	  console.log("Tuşa basıldı: Sağ");
-	  socket.emit('aciArttir');          
+	  socket.emit('aciAzalt');
 	}
+	//83
 	else if(e.keyCode==40) //Alt
 	{
 	  console.log("Tuşa basıldı: Alt");
