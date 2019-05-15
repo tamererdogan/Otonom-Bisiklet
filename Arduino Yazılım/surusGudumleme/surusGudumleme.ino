@@ -2,10 +2,9 @@
 int Rx = 2; //Rx ile bağlanıldı 
 int encoder_a = 3; //Enkoderin A portu
 int encoder_b = 4; //Enkoderin B portu
-int hubMotorPin = 6; //
+int hubMotorPin = 6; //Hub motor pwm pini
 int solYon = 9; //Direksiyonun saat yönünün tersine dönmesi için pwm çıkışı
 int sagYon = 10; //Direksiyonun saat yönüne dönmesi için pwm çıkışı
-int hizEnkoderi = 12; //Arka teker enkoderi
 
 /* DEĞİŞKENLER */
 int hubMotorPwm = 0; //Hub motora verilen pwm değeri
@@ -37,6 +36,10 @@ void seriHaberlesmeKesmesi()
   okunan = Serial.read();
   switch(okunan)
   {
+    case 'x':
+      darbe = 0;
+      hedefAci = 0;
+      break;
     case 'w':
       if(hubMotorPwm >= 190)
       {
@@ -105,15 +108,15 @@ void setup()
   pinMode(Rx, INPUT); //2 numaralı pin giriş olarak ayarlandı
   pinMode(encoder_a, INPUT); //3 numaralı pin giriş olarak ayarlandı
   pinMode(encoder_b, INPUT); //4 numaralı pin giriş olarak ayarlandı
-  pinMode(hizEnkoderi, INPUT); //12 numaralı pin giriş olarak ayarlandı
+  pinMode(hubMotorPin, OUTPUT); //6 numaralı pin çıkış olarak ayarlandı
+  pinMode(solYon, OUTPUT); //9 numaralı pin çıkış olarak ayarlandı
+  pinMode(sagYon, OUTPUT); //10 numaralı pin çıkış olarak ayarlandı    
   attachInterrupt(0, seriHaberlesmeKesmesi,CHANGE); //2 numaralı girişe kesme fonksiyonu atandı 
   attachInterrupt(1, encoder_kesme_a, CHANGE); //3 numaralı girişe kesme fonksiyonu atandı 
 }
 
 void loop() 
 {
-  //Arka enkoderin kodu eklenecek
-
   //  200(Pals) * 15(Redüktör Oranı) = 3000 (1 turda oluşan Pals Sayısı)
   //  360/3000 = 0.12 (1 Palsa denk gelen açı değeri)
   anlikAci = int(darbe*0.12);
@@ -126,16 +129,11 @@ void loop()
   hata = hedefAci - anlikAci;
   motor_sur(15, hata);
   
-  //analogWrite(hubMotorPin, hubMotorPwm);
+  analogWrite(hubMotorPin, hubMotorPwm);
   Serial.write(hubMotorPwm); 
   Serial.write(anlikAci);
   Serial.write(hedefAci);
   Serial.write(hata);
-
- /* Serial.print("Hedef:");
-  Serial.print(hedefAci);
-  Serial.print(" Anlik:");
-  Serial.println(anlikAci); */
-  
+    
   delay(10);
 }

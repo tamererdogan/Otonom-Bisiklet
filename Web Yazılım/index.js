@@ -26,8 +26,8 @@ io.on('connection', function(socket){
 
 	var url = socket.handshake.headers.referer;
 	console.log(url);
-
-	if (url == "http://localhost:8000/")
+	portListele(socket);
+	if (url == "http://192.168.137.203:8000/")
 	{
 		socket.on('baglantiDurumuNedir', function(){			
 			socket.emit("baglantiDurumu", baglantiDurumu);	
@@ -64,7 +64,7 @@ io.on('connection', function(socket){
 		});	
 	}
 
-	if (url == "http://localhost:8000/yonlendir")
+	if (url == "http://192.168.137.203:8000/yonlendir")
 	{
 		//Eğer A tuşana basıldıysa
 		socket.on("aciArttir", function(){
@@ -98,6 +98,14 @@ io.on('connection', function(socket){
 				console.log("Hiz Azalt");
 			}				
 		});
+		//Eğer Sıfırla komutu geldiyse
+		socket.on("sifirla", function(){
+			if (baglantiDurumu)
+			{
+				seriport.write("x\n");
+				console.log("Direksiyon Konumu Sifirlandi");
+			}				
+		});
 			    
 	    seriport.on('data', function(data){
 
@@ -120,12 +128,10 @@ io.on('connection', function(socket){
 	    	
 	    	var pwm = data[0];    	
 	    	var hata = data[3];
-			//console.log("Anlik:"+anlikAci+" hedefAci:"+hedefAci+" hata:"+hata);
 	    	io.sockets.emit("htmlPwm", pwm);
 	    	io.sockets.emit("htmlHedefAci", hedefAci);
 	    	io.sockets.emit("htmlAnlikAci", anlikAci);
 	    	io.sockets.emit("htmlHata", hata);
-	    	//io.sockets.emit("htmlAnlikHiz", data[4]); //Hız	
 	    });	
 	}
 });

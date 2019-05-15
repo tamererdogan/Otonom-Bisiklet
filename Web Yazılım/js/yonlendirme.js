@@ -4,10 +4,6 @@ socket.on("htmlPwm", function(pwm){
 	document.getElementById("pwm").innerHTML = pwm;
 }); 
 
-// socket.on("htmlAnlikHiz", function(anlikHiz){
-// 	document.getElementById("anlikHiz").innerHTML = anlikHiz;
-// });
-
 socket.on("htmlHedefAci", function(hedefAci){
 	document.getElementById("hedefAci").innerHTML = hedefAci;
 });
@@ -19,6 +15,12 @@ socket.on("htmlAnlikAci", function(anlikAci){
 socket.on("htmlHata", function(hata){	
 	document.getElementById("hata").innerHTML = hata;
 });
+
+function sifirla()
+{
+	console.log("Sıfırlama Butonuna Basıldı");
+	socket.emit("sifirla");
+}
 
 window.onkeydown=function(e){
              
